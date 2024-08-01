@@ -56,10 +56,10 @@ whatweb -i "$RESULTS_DIR/live_subdomains.txt" > "$RESULTS_DIR/whatweb.txt"
 # URL enumeration
 log "Running waybackurls"
 waybackurls $TARGET | tee "$RESULTS_DIR/waybackurls.txt"
-log "Running gau"
-gau $TARGET | tee "$RESULTS_DIR/gau.txt"
+log "Running getallurls [gau]"
+getallurls $TARGET | tee "$RESULTS_DIR/gau.txt"
 log "Running hakrawler"
-hakrawler -url $TARGET.com -depth 2 -plain | tee "$RESULTS_DIR/hakrawler.txt"
+echo "$TARGET" | hakrawler -d 2 -subs -t 10 -u -insecure | tee "$RESULTS_DIR/hakrawler.txt"
 
 # GitHub search
 log "Running github-search"
@@ -75,7 +75,7 @@ dirsearch -u $TARGET.com -e * > "$RESULTS_DIR/dirsearch.txt"
 
 # Fuzzing
 log "Running ffuf"
-ffuf -w wordlist.txt -u https://$TARGET.com/FUZZ > "$RESULTS_DIR/ffuf.txt"
+ffuf -w /usr/share/seclists/Discovery/Web-Content/common.txt -u https://$TARGET.com/FUZZ -o "$RESULTS_DIR/ffuf.txt"
 
 # Screenshots
 log "Running gowitness"
